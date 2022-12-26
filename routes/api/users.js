@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
@@ -35,7 +37,9 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ error: [{ msg: "User already exists!" }] });
+        return res
+          .status(400)
+          .json({ error: [{ msg: "User already exists!" }] });
       }
 
       // Get users gravator
@@ -53,18 +57,33 @@ router.post(
       });
 
       // Encrypt password
-      const salt = await bcrypt.genSalt(10);    // salt is used for hashing purpose
+      const salt = await bcrypt.genSalt(10); // salt is used for hashing purpose
 
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
 
       // Return jsonwebtokens
-      res.send("User Registered!");
+      const payload = {
+        user: {
+          id: user.id, //jwt format --> header.payload.signature | payload is readable,it contains body.
+        },
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"), // from default.json
+        { expiresIn: 360000 }, // 3600sec = 1hr
+        (err, token) => {
+          if (err) throw err;
+          //else
+          res.json({ token });
+        }
+      ); // the secret token has been created in the default.json, which works as an argument here
     } catch (err) {
       console.error(err.message);
       res.status(200).send("Server Error !");
-    } 
+    }
   }
 );
 

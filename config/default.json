@@ -1,3 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://hitanshu1512:hitanshu1512@cluster0.hxcgfwr.mongodb.net/?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://hitanshu1512:hitanshu1512@cluster0.hxcgfwr.mongodb.net/?retryWrites=true&w=majority",
+    "jwtSecret": "mySecretToken"
+
 }
