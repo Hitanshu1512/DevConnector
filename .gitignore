@@ -1,6 +1,2 @@
 node_modules/
-
-#  "react": "^18.2.0",//16.8.6
-#     "react-dom": "^18.2.0",//same
-#     "react-moment": "^1.1.2",
-#     "react-redux": "^8.0.5",//4.0.1
+config/default.json
